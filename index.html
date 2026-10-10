@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>홍선미 포트폴리오</title>
+<style>
+@font-face{font-family:"NanumSquare Neo";font-weight:400;font-display:swap;src:url("fonts/NanumSquareNeoTTF-bRg.woff2") format("woff2")}
+@font-face{font-family:"NanumSquare Neo";font-weight:700;font-display:swap;src:url("fonts/NanumSquareNeoTTF-cBd.woff2") format("woff2")}
+@font-face{font-family:"NanumSquare Neo";font-weight:800;font-display:swap;src:url("fonts/NanumSquareNeoTTF-dEb.woff2") format("woff2")}
+@font-face{font-family:"NanumSquare Neo";font-weight:900;font-display:swap;src:url("fonts/NanumSquareNeoTTF-eHv.woff2") format("woff2")}
+
+/* 레이아웃: 가이드 문서형 3단(왼쪽 내비 · 본문 · 이 페이지 목차). 개성은 형광펜 마킹, '판단 기록' 카드, [확인 필요] 스티커 */
+:root{
+  --bg:#F8F9F8; --surface:#FFFFFF; --ink:#17201C; --muted:#56625C; --faint:#8A948F;
+  --line:#E3E7E4; --accent:#1F9D6B; --accent-ink:#FFFFFF; --accent-soft:#E7F5EE;
+  --mark:#FFE07A; --mark-ink:#17201C; --flag:#D9650B; --flag-soft:#FFF0E2;
+  --ph:#F0F2F1; --ph-line:#BCC5C0;
+  --font:"NanumSquare Neo","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --nav-w:264px; --toc-w:200px; --content:760px;
+  --t-xs:12px; --t-sm:13.5px; --t-md:15.5px; --t-lg:19px; --t-xl:26px; --t-2xl:clamp(30px,4.4vw,44px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0F1412; --surface:#171D1A; --ink:#E7ECE9; --muted:#A3AEA8; --faint:#76817B;
+  --line:#28302C; --accent:#4CC994; --accent-ink:#0E1513; --accent-soft:#15291F;
+  --mark:#7A6417; --mark-ink:#FFF6D6; --flag:#FFA45C; --flag-soft:#33230F;
+  --ph:#141A17; --ph-line:#3A4540; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0F1412; --surface:#171D1A; --ink:#E7ECE9; --muted:#A3AEA8; --faint:#76817B;
+  --line:#28302C; --accent:#4CC994; --accent-ink:#0E1513; --accent-soft:#15291F;
+  --mark:#7A6417; --mark-ink:#FFF6D6; --flag:#FFA45C; --flag-soft:#33230F;
+  --ph:#141A17; --ph-line:#3A4540; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:var(--t-md);line-height:1.75;word-break:keep-all;overflow-wrap:break-word;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+h1,h2,h3{text-wrap:balance;line-height:1.35;margin:0}
+p{margin:0}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.mk{background:linear-gradient(transparent 52%,var(--mark) 52%);color:inherit;padding:0 .1em}
+
+/* 셸 */
+.shell{display:grid;grid-template-columns:var(--nav-w) minmax(0,1fr);min-height:100vh}
+.nav{position:sticky;top:env(safe-area-inset-top,0px);height:100vh;overflow-y:auto;border-right:1px solid var(--line);background:var(--surface);padding:28px 20px 40px;display:flex;flex-direction:column;gap:26px}
+.brand{display:flex;flex-direction:column;gap:6px;text-decoration:none;color:var(--ink)}
+.brand .name{font-weight:900;font-size:21px;letter-spacing:-.02em}
+.brand .role{font-size:var(--t-sm);color:var(--muted);line-height:1.5}
+.ver{display:inline-flex;align-self:flex-start;gap:6px;align-items:center;font-size:var(--t-xs);font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:999px;padding:2px 10px;letter-spacing:.02em}
+.ngroup{display:flex;flex-direction:column;gap:2px}
+.ngroup h4{margin:0 0 6px;font-size:var(--t-xs);font-weight:800;color:var(--faint);letter-spacing:.08em}
+.nlink{display:flex;justify-content:space-between;align-items:center;gap:8px;text-decoration:none;color:var(--muted);font-size:var(--t-sm);padding:7px 10px;border-radius:8px;line-height:1.45}
+.nlink:hover{background:var(--bg);color:var(--ink)}
+.nlink[aria-current="page"]{background:var(--accent-soft);color:var(--accent);font-weight:800}
+.nlink small{font-size:11px;color:var(--faint);font-variant-numeric:tabular-nums;flex:none}
+.nfoot{margin-top:auto;font-size:var(--t-xs);color:var(--faint);line-height:1.6}
+.themebtn{font:inherit;font-size:var(--t-xs);color:var(--muted);background:none;border:1px solid var(--line);border-radius:999px;padding:4px 12px;cursor:pointer;margin-top:8px}
+
+.topbar{display:none}
+.main{display:grid;grid-template-columns:minmax(0,1fr) var(--toc-w);gap:48px;padding-block:44px 96px;padding-inline:clamp(16px,4vw,56px);max-width:calc(var(--content) + var(--toc-w) + 160px)}
+.page{min-width:0;display:flex;flex-direction:column;gap:44px}
+.toc{position:sticky;top:44px;align-self:start;font-size:var(--t-sm);display:flex;flex-direction:column;gap:4px;border-left:1px solid var(--line);padding-left:16px}
+.toc b{font-size:var(--t-xs);color:var(--faint);letter-spacing:.08em;margin-bottom:4px}
+.toc button{font:inherit;text-align:left;background:none;border:0;padding:3px 0;cursor:pointer;color:var(--muted);line-height:1.5}
+.toc button:hover{color:var(--accent)}
+
+/* 페이지 머리 */
+.crumb{font-size:var(--t-xs);color:var(--faint);font-weight:700;letter-spacing:.04em}
+.phead{display:flex;flex-direction:column;gap:14px}
+.phead h1{font-size:var(--t-2xl);font-weight:900;letter-spacing:-.03em}
+.lede{font-size:var(--t-lg);color:var(--muted);line-height:1.65;max-width:42em}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.meta div{background:var(--surface);padding:12px 16px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.meta dt{font-size:var(--t-xs);color:var(--faint);font-weight:700}
+.meta dd{margin:0;font-size:var(--t-sm);font-weight:700;font-variant-numeric:tabular-nums}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:var(--t-xs);font-weight:700;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 10px;background:var(--surface)}
+.tag.ai{color:var(--accent);border-color:var(--accent)}
+
+/* 섹션 */
+.sec{display:flex;flex-direction:column;gap:16px;scroll-margin-top:24px}
+.sec>h2{font-size:var(--t-xl);font-weight:900;letter-spacing:-.02em;display:flex;gap:12px;align-items:baseline}
+.sec>h2 .no{font-size:var(--t-sm);color:var(--accent);font-weight:800;font-variant-numeric:tabular-nums}
+.sec h3{font-size:var(--t-lg);font-weight:800}
+.prose{display:flex;flex-direction:column;gap:12px;max-width:42em}
+.prose p{color:var(--ink)}
+ul.dots{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:6px}
+ul.dots li::marker{color:var(--accent)}
+
+/* 과정 단계 */
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;counter-reset:s}
+.steps li{display:grid;grid-template-columns:44px minmax(0,1fr);gap:14px;padding-bottom:20px;position:relative;counter-increment:s}
+.steps li::before{content:counter(s,decimal-leading-zero);font-weight:900;font-size:var(--t-sm);color:var(--accent);background:var(--accent-soft);border-radius:10px;height:32px;display:grid;place-items:center;font-variant-numeric:tabular-nums}
+.steps li::after{content:"";position:absolute;left:21px;top:38px;bottom:4px;width:2px;background:var(--line)}
+.steps li:last-child::after{display:none}
+.steps b{display:block;font-weight:800}
+.steps span{color:var(--muted);font-size:var(--t-sm)}
+
+/* 판단 기록 카드 */
+.decision{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface)}
+.decision>div{padding:18px 20px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.decision>div+div{border-left:1px dashed var(--line);background:var(--accent-soft)}
+.decision small{font-size:var(--t-xs);font-weight:800;color:var(--faint);letter-spacing:.04em}
+.decision>div+div small{color:var(--accent)}
+.decision p{font-weight:700}
+
+/* 결과 · 지표 */
+.outs{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.out{border:1px solid var(--line);border-radius:12px;padding:16px;background:var(--surface);display:flex;flex-direction:column;gap:4px;min-width:0}
+.out b{font-size:var(--t-lg);font-weight:900;letter-spacing:-.01em}
+.out span{font-size:var(--t-sm);color:var(--muted);line-height:1.6}
+.kpi{border:1px solid var(--line);border-radius:14px;background:var(--surface);overflow:hidden}
+.kpi header{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px 18px;border-bottom:1px solid var(--line);font-size:var(--t-sm);font-weight:800}
+.kpi header span{color:var(--faint);font-weight:700;font-size:var(--t-xs)}
+.kpi table{width:100%;border-collapse:collapse;font-size:var(--t-sm)}
+.kpi td{padding:10px 18px;border-top:1px solid var(--line);vertical-align:top}
+.kpi tr:first-child td{border-top:0}
+.kpi td:first-child{font-weight:800;width:38%}
+.kpi td:last-child{color:var(--muted)}
+
+.aibox{display:flex;flex-direction:column;gap:10px;border-radius:14px;padding:18px 20px;background:var(--accent-soft)}
+.aibox h3{font-size:var(--t-md);color:var(--accent);font-weight:900}
+.aibox ul{margin:0;padding-left:1.1em;display:flex;flex-direction:column;gap:4px;font-size:var(--t-sm)}
+
+/* 확인 필요 스티커 */
+.flag{display:inline-block;font-size:.82em;font-weight:800;color:var(--flag);background:var(--flag-soft);border-radius:6px;padding:0 6px;line-height:1.6;white-space:nowrap}
+
+/* 사진 자리 */
+.ph{margin:0;width:100%;max-width:100%;border:1.5px dashed var(--ph-line);border-radius:14px;background:var(--ph);display:grid;place-items:center;text-align:center;padding:16px;color:var(--faint);font-size:var(--t-sm)}
+.ph b{display:block;color:var(--muted);font-weight:800}
+.ph i{font-style:normal;font-size:var(--t-xs);font-variant-numeric:tabular-nums}
+.ph svg{width:28px;height:28px;margin:0 auto 6px;display:block;stroke:var(--faint);fill:none;stroke-width:1.6}
+.gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.gallery .ph.wide{grid-column:1/-1}
+
+/* 홈 */
+.hero{display:grid;grid-template-columns:minmax(0,1fr) 200px;gap:32px;align-items:end}
+.hero h1{font-size:clamp(30px,4.6vw,50px);font-weight:900;letter-spacing:-.035em;line-height:1.3}
+.hero .ph{aspect-ratio:4/5}
+.traits{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.trait{border-top:3px solid var(--ink);padding-top:12px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.trait b{font-weight:900;font-size:var(--t-lg)}
+.trait em{font-style:normal;font-size:var(--t-xs);color:var(--faint);font-weight:800;letter-spacing:.06em}
+.trait span{font-size:var(--t-sm);color:var(--muted);line-height:1.65}
+.manual{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.manual .out b{font-size:var(--t-md)}
+
+/* 케이스 카드 */
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.card{display:flex;flex-direction:column;gap:10px;text-decoration:none;color:var(--ink);border:1px solid var(--line);border-radius:16px;background:var(--surface);padding:14px 14px 18px;transition:border-color .15s,transform .15s;min-width:0}
+.card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.card .ph{aspect-ratio:16/9;padding:8px}
+.card .k{font-size:var(--t-xs);color:var(--faint);font-weight:800;font-variant-numeric:tabular-nums}
+.card h3{font-size:var(--t-md);font-weight:900;line-height:1.45}
+.card p{font-size:var(--t-sm);color:var(--muted);line-height:1.6}
+
+/* 전체 목록 */
+.filters{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font:inherit;font-size:var(--t-sm);font-weight:700;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:5px 14px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+table.list{width:100%;border-collapse:collapse;font-size:var(--t-sm);min-width:620px}
+table.list th{text-align:left;font-size:var(--t-xs);color:var(--faint);font-weight:800;padding:10px 16px;border-bottom:1px solid var(--line);letter-spacing:.04em}
+table.list td{padding:12px 16px;border-top:1px solid var(--line);vertical-align:top}
+table.list tr:first-child td{border-top:0}
+table.list td.when{font-variant-numeric:tabular-nums;color:var(--muted);white-space:nowrap}
+table.list a{font-weight:800;text-decoration:none;color:var(--ink)}
+table.list a:hover{color:var(--accent)}
+table.list .sub{display:block;color:var(--muted);font-size:var(--t-xs);margin-top:2px}
+
+/* 이력 타임라인 */
+.tl{display:flex;flex-direction:column;border-left:2px solid var(--line);margin-left:6px}
+.tl>div{position:relative;padding:0 0 22px 22px;display:flex;flex-direction:column;gap:4px}
+.tl>div::before{content:"";position:absolute;left:-7px;top:8px;width:12px;height:12px;border-radius:50%;background:var(--surface);border:3px solid var(--accent)}
+.tl time{font-size:var(--t-xs);color:var(--faint);font-weight:800;font-variant-numeric:tabular-nums}
+.tl b{font-weight:900}
+.tl span{font-size:var(--t-sm);color:var(--muted)}
+
+.pager{display:grid;grid-template-columns:1fr 1fr;gap:12px;border-top:1px solid var(--line);padding-top:24px}
+.pager a{display:flex;flex-direction:column;gap:2px;text-decoration:none;color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:12px 16px;background:var(--surface);min-width:0}
+.pager a small{color:var(--faint);font-size:var(--t-xs);font-weight:700}
+.pager a b{font-weight:800;font-size:var(--t-sm)}
+.pager a.next{text-align:right}
+.pager a:hover{border-color:var(--accent)}
+.note{font-size:var(--t-xs);color:var(--faint)}
+
+@media (max-width:1180px){.main{grid-template-columns:minmax(0,1fr)}.toc{display:none}}
+@media (max-width:860px){
+  .shell{grid-template-columns:minmax(0,1fr)}
+  .topbar{display:flex;position:sticky;top:env(safe-area-inset-top,0px);z-index:20;justify-content:space-between;align-items:center;padding:12px 16px;background:var(--surface);border-bottom:1px solid var(--line)}
+  .topbar b{font-weight:900}
+  .topbar button{font:inherit;font-size:var(--t-sm);font-weight:800;background:var(--accent-soft);color:var(--accent);border:0;border-radius:999px;padding:6px 14px;cursor:pointer}
+  .nav{position:fixed;inset:0 25% 0 0;height:auto;z-index:30;transform:translateX(-105%);transition:transform .2s;box-shadow:0 0 0 100vmax rgba(10,12,24,0)}
+  .nav.open{transform:none;box-shadow:0 0 0 100vmax rgba(10,12,24,.35)}
+  .main{padding-block:28px 72px}
+  .hero{grid-template-columns:minmax(0,1fr)}
+  .hero .ph{max-width:180px}
+}
+@media (max-width:620px){
+  .traits,.cards,.manual,.gallery,.decision,.pager{grid-template-columns:minmax(0,1fr)}
+  .decision>div+div{border-left:0;border-top:1px dashed var(--line)}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<div class="topbar"><b>홍선미</b><button id="menuBtn" type="button" aria-expanded="false" aria-controls="nav">메뉴</button></div>
+<div class="shell">
+  <nav class="nav" id="nav" aria-label="포트폴리오 메뉴"></nav>
+  <div class="main">
+    <main class="page" id="page"></main>
+    <aside class="toc" id="toc" aria-label="이 페이지 목차"></aside>
+  </div>
+</div>
+
+<script>
+const F = t => `<span class="flag">${t ? '확인 필요 · ' + t : '확인 필요'}</span>`;
+const PH_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg>';
+const ph = (label, ratio = '16/9', cls = '') =>
+  `<figure class="ph ${cls}" style="aspect-ratio:${ratio}">` +
+  `<div>${PH_ICON}<b>${label}</b><i>사진 자리 · ${ratio.replace('/', ':')}</i></div></figure>`;
+
+/* ───────── 프로젝트 데이터 ───────── */
+const P = [
+{ id:'ibk', featured:true, cat:['기준·가이드','AI'],
+  title:'사람과 AI가 같은 기준으로 쓰는 문구 체계',
+  service:'은행 개인·기업 채널 UX 라이팅 가이드', org:'하이유엑스컨설팅 · IBK기업은행',
+  when:'2026.03 – 2026.08', role:'현황 분석, 가이드 체계·작성, AI 지침, 검수', team:F('인원'),
+  lede:'채널마다 다르게 판단하던 문구를 원칙과 상황별 기준으로 묶고, 실무자가 바로 찾아보는 HTML 가이드로 만들었어요. 같은 원칙을 AI 지침과 예문 데이터로 옮겨 내부 AI도 그 기준으로 문구를 만들고 검수하게 했어요.',
+  problem:['같은 상황인데도 화면과 담당자마다 문구가 다르게 쓰이고 있었어요.','기준 문서가 있어도 실무자가 작업 중에 바로 찾아보기 어려웠어요. '+F('현황 분석에서 찾은 대표 사례·건수')],
+  decision:{ first:'처음엔 문구 표현을 다듬는 일이라고 봤어요. '+F(), then:'현업 인터뷰와 VOC를 보니 문제는 판단 기준이 사람마다 다르다는 데 있었어요. 그래서 예문집이 아니라 판단 순서를 먼저 정했어요. '+F('본인 표현으로 다듬기') },
+  steps:[['현황 분석','현업 인터뷰와 VOC로 채널별 문구 문제를 유형화'],['원칙·보이스앤톤','개인·기업 채널이 함께 쓸 원칙과 말투 기준 정의'],['상황별·유형별 가이드','안내·오류·확인 같은 상황과 버튼·알림 같은 컴포넌트별 작성법'],['독립 실행형 HTML 가이드','설치 없이 열어 검색하고 복사하는 가이드로 개발'],['AI 지침·RAG 예문','같은 원칙을 AI 지침과 예문 데이터로 옮겨 생성·검수에 적용'],['LLM 결과 검수','AI가 만든 문구를 가이드 기준으로 검수하고 지침 보완']],
+  outs:[['원칙 → 상황 → 컴포넌트','실무자가 위에서 아래로 따라가면 판단이 끝나는 3단 구조'],['HTML 가이드','설치 없이 열어 쓰는 독립 실행형 가이드'],['AI 지침 + RAG 예문','사람용 기준을 AI가 읽는 형태로 변환']],
+  ai:['원칙을 AI가 따를 수 있는 지침 문장으로 바꿔 씀','RAG용 예문 데이터를 구축','AI 생성 문구를 같은 기준으로 검수하고 지침을 고침', '가이드 HTML 제작에 AI를 어떻게 썼는지 '+F()],
+  kpi:[['가이드 준수율','신규·수정 문구 중 기준을 지킨 비율'],['AI 문구 수정률','AI가 만든 문구 중 사람이 고친 비율과 이유'],['가이드 검색어','실무자가 가장 많이 찾는 상황 = 다음에 보강할 곳']],
+  photos:[['가이드 메인 화면','16/9','wide'],['원칙·보이스앤톤 페이지','4/3'],['AI 지침·예문 데이터 예시','4/3']] },
+
+{ id:'heybeagle', featured:true, cat:['서비스 기획'],
+  title:'모호한 요구를 스펙·일정·운영까지 끌고 간 리뉴얼',
+  service:'엔터테이너 매칭 플랫폼 클라이언트 영역 리뉴얼', org:'오픈오브젝트 · 헤이비글',
+  when:'2023.09 – 2024.06', role:'PM, UX/UI 기획, FO/BO 설계, 운영', team:'3명',
+  lede:'아티스트를 찾는 클라이언트 쪽 화면 전체를 다시 설계했어요. 흩어진 요구사항을 정의서로 모으고, IA와 FO/BO 설계, 테스트 시나리오, 요구사항별 일정 관리까지 맡았고, 배포 후 운영 건도 직접 처리했어요.',
+  problem:['요구사항이 대화와 메모에 흩어져 있어 무엇을 먼저 만들지 합의하기 어려웠어요.','메뉴 구조가 클라이언트의 실제 이용 순서와 맞지 않았어요. '+F('구체 사례')],
+  decision:{ first:'처음엔 화면을 새로 그리는 리뉴얼이라고 봤어요.', then:'요구사항부터 정의서와 마인드맵으로 한곳에 모으고, 요구사항 단위로 일정을 쪼개야 합의가 된다고 판단했어요. 우선순위 기준은 '+F('우선순위를 정한 기준') },
+  steps:[['요구사항 정의','요구사항 정의서 작성, 마인드맵으로 관계 관리'],['IA·메뉴 재배치','클라이언트 이용 흐름에 맞춰 메뉴 구조 재설계'],['공통 정의·FO/BO 설계','공통 규칙을 먼저 정하고 FO/BO 화면설계서 작성'],['테스트 시나리오','개발 검수용 테스트 시나리오 작성'],['일정 관리','Swit WBS로 요구사항별 일정 관리, 담당자와 조율'],['배포 후 운영','운영 건을 맡아 배포까지의 사이클을 경험']],
+  outs:[['요구사항 → 배포 → 운영','한 서비스를 처음부터 운영까지 완주'],['FO/BO 설계서','사용자 화면과 관리자 화면을 함께 설계'],['요구사항별 WBS','일정 변경을 요구사항 단위로 추적']],
+  ai:[F('이 프로젝트에서 AI를 썼는지, 썼다면 어디에')],
+  kpi:[['매칭 요청 완료율','클라이언트가 섭외 요청을 끝까지 마친 비율'],['요청 → 계약 전환','요청 이후 실제 계약까지 이어진 비율'],['운영 문의 유형','배포 후 들어온 문의로 다음 개선 순서 정하기']],
+  photos:[['리뉴얼 전후 메인 화면','16/9','wide'],['요구사항 정의서·마인드맵','4/3'],['Swit WBS 화면','4/3']] },
+
+{ id:'monimo', featured:true, cat:['리서치'],
+  title:'기능은 많은데 못 찾는 홈, 30명에게 물어 우선순위로',
+  service:'생활금융 통합 앱 사용자 조사·UX 전략', org:'하이유엑스컨설팅 · 삼성 모니모',
+  when:'2025.10 – 2025.12', role:'조사 설계·진행, 인사이트 도출, 개선 우선순위', team:F('인원'),
+  lede:'3주 동안 30명을 대상으로 혼합조사를 진행했어요. 홈 개인화와 기능 발견에서 사용자가 막히는 지점을 찾고, 그 결과를 개선 우선순위와 후속 검증 지표로 정리했어요.',
+  problem:['기능은 계속 늘어나는데 사용자는 필요한 기능을 홈에서 찾지 못했어요.','개인화가 사용자가 기대하는 방식으로 작동하는지 근거가 부족했어요. '+F('조사 전 가설')],
+  decision:{ first:'처음엔 '+F('처음 세운 가설'), then:'파고들어 보니 '+F('조사로 바뀐 판단 한 문장') },
+  steps:[['조사 설계','3주 일정, 30명, 정성·정량 혼합 구성 '+F('인터뷰·설문 구성')],['진행','홈 개인화와 기능 발견 장면을 중심으로 관찰·질문'],['분석','발화와 행동을 묶어 문제 유형으로 구조화'],['우선순위','영향과 빈도로 개선 순서 정리 '+F('실제 기준')],['검증 지표','개선 후 확인할 지표를 함께 제안']],
+  outs:[['3주 · 30명','혼합조사 규모'],['개선 우선순위','홈 개인화·기능 발견 과제'],['후속 검증 지표','개선 이후 무엇을 볼지까지 설계']],
+  ai:['인터뷰 기록 정리·분류에 AI를 썼는지 '+F()],
+  kpi:[['기능 발견율','홈에서 주요 기능까지 도달한 비율'],['개인화 영역 클릭률','추천 영역을 실제로 누른 비율'],['재방문 주기','개선 후 홈 재방문 간격 변화']],
+  photos:[['조사 설계 보드','16/9','wide'],['어피니티·인사이트 정리','4/3'],['우선순위 매트릭스','4/3']] },
+
+{ id:'egypt', featured:true, cat:['기준·가이드','리서치','AI'],
+  title:'다른 언어·문화권 정부 서비스의 UI/UX 표준과 AI 에이전트 원칙',
+  service:'한-이집트 디지털정부 UI/UX 표준 · Agentic AI UX', org:'하이유엑스컨설팅 · 한-이집트 디지털정부 협력센터',
+  when:'2025.08 – 2025.12', role:'현지 조사, 워크숍·강의, 표준 템플릿, AI UX 원칙', team:F('인원'),
+  lede:'두 차례 현지에 파견돼 인터뷰와 워크숍, 강의를 진행했어요. 모바일 우선, 오른쪽에서 왼쪽으로 읽는 RTL, 접근성을 반영한 표준 템플릿을 만들고, 정부 서비스에 들어갈 AI 에이전트의 UX 원칙을 설계했어요.',
+  problem:['아랍어 RTL 환경과 현지 사용 맥락을 반영한 공통 기준이 없었어요.','AI 에이전트가 사용자를 대신해 행동할 때 무엇을 보여 주고 언제 확인받을지 원칙이 필요했어요.'],
+  decision:{ first:F('처음 생각한 표준의 범위'), then:F('현지 조사 후 바뀐 점 한 문장') },
+  steps:[['1차 파견 (9/2–9/18)','현지 인터뷰와 서비스 맥락 조사'],['표준 템플릿','모바일 우선·RTL·접근성 기준을 담은 템플릿 설계'],['Agentic AI UX 원칙','AI가 대신 행동할 때의 확인·설명·되돌리기 원칙'],['2차 파견 (11/10–11/26)','워크숍·강의로 기준을 공유하고 합의']],
+  outs:[['현지 파견 2회','인터뷰·워크숍·강의'],['표준 템플릿','모바일 우선 · RTL · 접근성'],['AI 에이전트 원칙','정부 서비스용 Agentic AI UX']],
+  ai:['AI 에이전트가 사용자 대신 행동하는 흐름의 UX 원칙을 설계','원칙 문서 작성·번역에 AI를 썼는지 '+F()],
+  kpi:[['표준 적용 서비스 수','템플릿을 적용한 서비스 수'],['접근성 점검 통과율','표준 체크리스트 기준'],['AI 작업 확인 단계 이탈','에이전트가 확인을 요청할 때 그만두는 비율']],
+  photos:[['현지 워크숍 사진','16/9','wide'],['RTL 표준 템플릿','4/3'],['Agentic AI UX 원칙 장표','4/3']] },
+
+{ id:'hifunding', cat:['리서치','서비스 기획'],
+  title:'투자 플랫폼의 신뢰 장벽을 메인 홈 구조로 풀기',
+  service:'P2P 투자 플랫폼 웹 리뉴얼', org:'하이유엑스컨설팅 · 하이펀딩',
+  when:'2025.06 – 2025.08', role:'현업·사용자 인터뷰, 프로토타입', team:F('인원'),
+  lede:'현업과 사용자를 인터뷰해 처음 온 사람이 투자를 망설이는 이유를 정리했어요. 신뢰와 정보 이해가 핵심 장벽이라고 정의하고, 메인 홈을 그 순서에 맞춰 다시 설계해 프로토타입으로 보여 줬어요.',
+  problem:['처음 방문한 사용자가 상품 정보를 이해하기 어렵고 믿을 근거를 찾지 못했어요.'],
+  steps:[['인터뷰','현업과 사용자 요구 수집 '+F('대상·인원')],['장벽 정의','신뢰 · 정보 이해 두 가지로 정리'],['메인 홈 재설계','신뢰 근거를 먼저 보여 주는 정보 순서'],['프로토타입','제안안을 클릭해 볼 수 있게 제작']],
+  kpi:[['첫 방문 → 상품 상세','메인에서 상품 상세로 넘어간 비율'],['첫 투자 전환','가입 후 첫 투자까지 이어진 비율']],
+  photos:[['메인 홈 프로토타입','16/9','wide']] },
+
+{ id:'healthgod', cat:['리서치','서비스 기획'],
+  title:'보험 청구 서비스의 커뮤니티·병원 연계 경험 다시 짜기',
+  service:'보험 청구·건강 서비스 리뉴얼', org:'하이유엑스컨설팅 · 청구의신(건강의신)',
+  when:'2025.03 – 2025.06', role:'사용자 조사·아이데이션, IA, UI Flow, 프로토타입, 스토리보드, WBS', team:F('인원'),
+  lede:'사용자 조사와 아이데이션으로 리뉴얼 방향을 정하고, IA와 UI 흐름, 프로토타입, 스토리보드로 구체화했어요. 일정은 WBS로 관리했어요.',
+  problem:['커뮤니티와 연계 병원 경험이 따로 놀아 서비스 안에서 이어지지 않았어요. '+F('구체 문제')],
+  steps:[['사용자 조사·아이데이션','리뉴얼 방향 도출'],['IA·UI Flow','커뮤니티와 병원 연계를 잇는 구조'],['프로토타입·스토리보드','화면 단위로 구체화'],['WBS','일정·산출물 관리']],
+  kpi:[['청구 완료율','청구 시작 대비 완료 비율'],['커뮤니티 → 병원 연계 이동','콘텐츠에서 병원 정보로 넘어간 비율']],
+  photos:[['IA·UI Flow','16/9','wide']] },
+
+{ id:'etax', cat:['기준·가이드','AI'],
+  title:'세금 안내 문구와 이용안내를 AI 검색 시대에 맞추기',
+  service:'지방세 납부 서비스 UX 라이팅 가이드 · 이용안내 기획', org:'하이유엑스컨설팅 · 서울시 ETAX/STAX',
+  when:'2026.08 – 2026.09', role:'HTML 가이드, AEO 기준, 이용안내 IA·벤치마킹', team:F('인원'),
+  lede:'세금처럼 어려운 안내를 쉬운 문구로 쓰는 기준을 HTML 가이드로 만들었어요. AI 검색이 답변에 그대로 가져가도 정확하도록 AEO(답변 엔진 최적화) 기준을 더했고, 이용안내의 IA와 FAQ·헬프데스크 구조도 기획했어요.',
+  problem:['안내 문구가 어렵고, 사람이 검색해도 AI가 요약해도 정확한 답을 얻기 어려웠어요.'],
+  steps:[['UX 라이팅 기준','세금 용어를 쉬운 말로 바꾸는 규칙'],['AEO 기준','AI 답변에 인용되기 좋은 질문·답 구조'],['이용안내 IA','FAQ·헬프데스크 벤치마킹으로 구조 설계'],['화면 아이데이션','사전 작업 4–5개 '+F('작업 목록')]],
+  ai:['AI 검색이 답변을 만들 때 정확히 인용하도록 문서 구조 기준을 세움'],
+  kpi:[['FAQ 해결률','FAQ 열람 후 문의로 넘어가지 않은 비율'],['AI 답변 정확도','주요 질문에 대한 AI 검색 답변 점검']],
+  photos:[['HTML 가이드 화면','16/9','wide']] },
+
+{ id:'shinhan', cat:['서비스 기획'],
+  title:'복잡한 카드 신청 흐름을 이해 가능한 단계로',
+  service:'카드 온라인 신청 프로세스 고도화', org:'오픈오브젝트 · 신한카드',
+  when:'2024.06 – 2024.07', role:'IA, 프로세스, UI/UX 기획, UX 라이팅', team:F('인원'),
+  lede:'온라인 카드 신청 여정을 다시 구성했어요. 정보구조와 프로세스, 화면, 문구를 한 흐름으로 함께 설계했어요.',
+  problem:['신청 단계가 많고 각 단계에서 무엇을 해야 하는지 알기 어려웠어요. '+F('개선 전 문제')],
+  steps:[['신청 여정 재구성','단계 묶기와 순서 조정'],['IA·프로세스','분기와 예외 흐름 정리'],['화면·UX 라이팅','단계마다 할 일을 문구로 안내']],
+  kpi:[['신청 완료율','신청 시작 대비 완료'],['단계별 이탈','어느 단계에서 그만두는지']],
+  photos:[['신청 플로우','16/9','wide']] },
+
+{ id:'olacare', cat:['서비스 기획'],
+  title:'헬스케어 서비스 요구를 빠르게 구조로',
+  service:'헬스케어 앱 메인 홈 · RFP 분석', org:'하이유엑스컨설팅 · KB올라케어',
+  when:'2026.02 · 2026.06', role:'RFP 분석, 헬스케어 벤치마킹, 메인 홈 지원', team:F('인원'),
+  lede:'처음 접한 헬스케어 도메인의 요구사항을 분석하고 벤치마킹으로 서비스 구조를 제안했어요. 이후 본 프로젝트에서 메인 홈 작업을 지원했어요.',
+  steps:[['요구사항 분석','RFP에서 핵심 요구 추출'],['벤치마킹','헬스케어 서비스 사례 분석'],['메인 홈 지원',F('맡은 화면·범위')]],
+  photos:[['메인 홈 화면','16/9','wide']] },
+
+{ id:'securities', cat:['서비스 기획'],
+  title:'증권 앱의 입문 콘텐츠·혜택·미션 구조',
+  service:'해외주식 MTS · 배지·미션 시스템', org:'하이유엑스컨설팅 · 현대차증권, KB증권',
+  when:'2025.08 – 2026.02', role:'입문 콘텐츠·혜택 구조 기획, 배지·미션 시스템 기획', team:F('인원'),
+  lede:'해외주식을 처음 하는 사용자를 위한 입문 콘텐츠와 혜택·미션 구조를 기획했어요. 이어서 다른 증권 앱의 배지·미션 시스템도 설계했어요.',
+  steps:[['입문 콘텐츠·혜택 구조','해외주식 MTS (2025.08–11)'],['배지·미션 시스템','달성 조건과 보상 구조 (2026.01–02) '+F('달성 조건·담당 화면')]],
+  kpi:[['미션 완료율','시작한 미션 중 완료 비율'],['첫 거래 전환','입문 콘텐츠 본 사용자의 첫 거래']],
+  photos:[['미션·배지 화면','16/9','wide']] },
+
+{ id:'daelim', cat:['서비스 기획'],
+  title:'산출물 없던 관리자 화면을 처음부터 정의하기',
+  service:'아파트 원격 관리 앱 전면 개편', org:'오픈오브젝트 · 대림 스마트홈',
+  when:'2023.08 – 2023.09', role:'FO/BO 기획, 검수, 사용자 매뉴얼', team:'2명',
+  lede:'기획 중반에 합류해 AS-IS에서 TO-BE로 메뉴 구조를 정리했어요. 관리자(BO) 화면은 기존 설계서가 없어 공통 규칙부터 새로 정의했고, 디자인·퍼블리싱 검수와 사용자 매뉴얼까지 맡았어요.',
+  steps:[['메뉴 구조 정리','AS-IS → TO-BE 변경점 중심'],['FO/BO 설계','BO는 공통 규칙부터 새로 정의'],['검수·매뉴얼','디자인·퍼블리싱 검수, 사용자 매뉴얼']],
+  photos:[['메뉴 구조도','16/9','wide']] },
+
+{ id:'seoulpay', cat:['서비스 기획'],
+  title:'새 결제 기능을 기존 구조에 연결하다 찾은 오류',
+  service:'상품권 결제 앱 터치결제 추가', org:'오픈오브젝트 · 서울페이',
+  when:'2023.06 – 2023.07', role:'신규 기능 IA, FO 화면설계', team:'2명',
+  lede:'터치결제 기능이 들어오면서 IA와 FO 화면설계를 고쳤어요. 기존 상품권 구매 프로세스를 다시 그리다 오류를 발견해 현행화 때 바로잡았어요.',
+  steps:[['IA 수정','신규 기능 위치와 진입 경로'],['FO 화면설계','터치결제 화면'],['기존 흐름 점검','구매 프로세스 오류 발견·수정']],
+  photos:[['터치결제 화면설계','16/9','wide']] },
+
+{ id:'hwaan', cat:['개인·학교','AI'],
+  title:'카메라로 찍으면 성분을 알려 주는 앱, 기획부터 개발까지',
+  service:'OCR 화장품 성분 분석 앱 ‘화안’ (졸업프로젝트)', org:'서울여자대학교',
+  when:'2022.09 – 2022.12', role:'기획, 디자인, 앱 개발, DB, 논문', team:'2명',
+  lede:'성분표를 카메라로 찍으면 유해·주의·기능 성분을 나눠 보여 주는 앱이에요. 엑스포 설문에서 응답자 30%가 부작용 경험이 있다는 걸 확인하고, 2개월 안에 핵심 기능만 먼저 만드는 MVP로 범위를 정했어요. 졸업프로젝트 최우수상을 받았고 KCI 논문으로 냈어요.',
+  steps:[['문제 확인','엑스포 설문 분석 (응답자 30% 부작용 경험)'],['MVP 범위','핵심 기능 우선, 2개월 일정'],['개발','OCR 인식, 성분 DB, 앱 구현'],['논문','KCI 등재 논문 작성']],
+  outs:[['최우수상','프로젝트종합설계'],['KCI 논문','기획·개발 과정 정리']],
+  ai:['Google OCR 텍스트 인식으로 성분을 자동 분류','OCR 인식 성능 개선에 참여'],
+  photos:[['앱 화면','9/16'],['성분 분석 결과 화면','9/16']] },
+
+{ id:'hci', cat:['리서치','개인·학교'],
+  title:'부부의 돈 관리 맥락에서 찾은 서비스 전략',
+  service:'HCI 2026 포스터 논문', org:'HCI Korea 2026',
+  when:'2026', role:'문제 정의, 리서치, 분석, 작성', team:F('인원'),
+  lede:'“맥락 정보 기반의 부부 금융 서비스 UX 전략 탐색” 포스터 논문에 참여했어요. 문제 정의부터 리서치, 분석, 작성까지 함께했어요.',
+  steps:[['문제 정의',''],['리서치·분석',F('방법·인원')],['논문 작성','포스터 발표']],
+  photos:[['포스터','3/4']] },
+
+{ id:'filterbubble', cat:['리서치','개인·학교'],
+  title:'필터버블을 줄이는 앱, 더블 다이아몬드로 끝까지',
+  service:'UI/UX 학회 팀 프로젝트', org:'크리솔 UI/UX 학회',
+  when:'2021.03 – 2021.10', role:'팀장, 기획, 디자인', team:'5명',
+  lede:'PEST·STP 분석과 어피니티 다이어그램으로 문제를 좁히고, 사용자 조사로 페르소나와 고객 여정 지도를 만든 뒤 Adobe XD 프로토타입으로 마무리했어요.',
+  steps:[['문제 발견','PEST·STP, 어피니티 다이어그램'],['사용자 정의','페르소나, 고객 여정 지도'],['프로토타입','Adobe XD']],
+  photos:[['프로토타입','16/9','wide']] },
+];
+
+/* 상세 페이지 없이 목록에만 두는 짧은 작업 */
+const SHORT = [
+  ['2026.03 – 04','생활금융 앱 개선 기획안','하이유엑스컨설팅','결과와 배운 점 '+F('회고')],
+  ['2026.03','모임통장 서비스 기획안','하이유엑스컨설팅','기획안 작성'],
+  ['2025.07 – 08','증권 서비스 아이디어 프로토타입','하이유엑스컨설팅','아이디어 프로토타입'],
+];
+
+const CATS = ['전체','리서치','기준·가이드','서비스 기획','AI','개인·학교'];
+
+/* ───────── 공통 렌더 ───────── */
+function meta(p){
+  return `<dl class="meta">
+    <div><dt>기간</dt><dd>${p.when}</dd></div>
+    <div><dt>맡은 일</dt><dd>${p.role}</dd></div>
+    <div><dt>참여 인원</dt><dd>${p.team}</dd></div>
+    <div><dt>소속 · 서비스</dt><dd>${p.org}</dd></div></dl>`;
+}
+let n = 0; const sec = (id, title, body) => `<section class="sec" id="${id}"><h2><span class="no">${String(++n).padStart(2,'0')}</span>${title}</h2>${body}</section>`;
+
+function projectPage(p){
+  n = 0;
+  const i = P.indexOf(p), prev = P[i-1], next = P[i+1];
+  let h = `<header class="phead"><div class="crumb">${p.featured ? '대표 케이스' : '모든 프로젝트'} · ${p.service}</div>
+    <h1>${p.title}</h1><p class="lede">${p.lede}</p>
+    <div class="tags">${p.cat.map(c => `<span class="tag ${c==='AI'?'ai':''}">${c}</span>`).join('')}</div>${meta(p)}</header>`;
+  h += ph(p.photos[0][0], p.photos[0][1], 'wide');
+  if (p.problem) h += sec('problem','문제', `<div class="prose">${p.problem.map(x=>`<p>${x}</p>`).join('')}</div>`);
+  if (p.decision) h += sec('decision','판단 기록', `<div class="decision"><div><small>처음 본 것</small><p>${p.decision.first}</p></div><div><small>파고들어 보니</small><p>${p.decision.then}</p></div></div>`);
+  h += sec('process','과정', `<ol class="steps">${p.steps.map(s=>`<li><div><b>${s[0]}</b><span>${s[1]}</span></div></li>`).join('')}</ol>`);
+  if (p.photos.length > 1) h += `<div class="gallery">${p.photos.slice(1).map(x=>ph(x[0],x[1],x[2]||'')).join('')}</div>`;
+  if (p.outs) h += sec('result','결과', `<div class="outs">${p.outs.map(o=>`<div class="out"><b>${o[0]}</b><span>${o[1]}</span></div>`).join('')}</div><p class="note">성과 수치 ${F()}</p>`);
+  if (p.ai) h += sec('ai','AI를 쓴 곳', `<div class="aibox"><h3>이 프로젝트에서 AI에게 맡긴 일</h3><ul>${p.ai.map(a=>`<li>${a}</li>`).join('')}</ul></div>`);
+  if (p.kpi) h += sec('next','출시 후 볼 지표', `<div class="kpi"><header>이 서비스를 계속 맡는다면 볼 지표<span>제안 · 실제 측정 아님</span></header><table>${p.kpi.map(k=>`<tr><td>${k[0]}</td><td>${k[1]}</td></tr>`).join('')}</table></div>`);
+  h += `<nav class="pager" aria-label="이전·다음 프로젝트">${prev?`<a href="#${prev.id}"><small>이전</small><b>${prev.title}</b></a>`:'<span></span>'}${next?`<a class="next" href="#${next.id}"><small>다음</small><b>${next.title}</b></a>`:'<a class="next" href="#projects"><small>목록으로</small><b>모든 프로젝트</b></a>'}</nav>`;
+  return h;
+}
+
+function card(p){
+  return `<a class="card" href="#${p.id}">${ph(p.photos[0][0],'16/9')}<span class="k">${p.when}</span><h3>${p.title}</h3><p>${p.service}</p></a>`;
+}
+
+/* ───────── 페이지들 ───────── */
+const PAGES = {
+home(){ n = 0; return `
+  <div class="hero"><header class="phead"><div class="crumb">홍선미 포트폴리오 · 2026년 10월판</div>
+    <h1>흩어진 신호를 모아<br><span class="mk">팀이 반복해 쓰는 기준</span>으로 바꿔요.</h1>
+    <p class="lede">UX·서비스 기획자 홍선미예요. 사용자와 현업의 말을 조사해 문제를 다시 정의하고, 규칙이 복잡한 서비스를 쉬운 흐름과 원칙으로 정리해 왔어요. 요즘은 그 기준을 AI도 따르게 만드는 일을 해요.</p></header>
+    ${ph('프로필 사진','4/5')}</div>
+  ${sec('traits','이렇게 일해요', `<div class="traits">
+    <div class="trait"><b>구조화</b><span>인터뷰, VOC, 요구사항처럼 흩어진 정보를 묶어 핵심 문제를 찾아요.</span></div>
+    <div class="trait"><b>방향 설계</b><span>정리에서 멈추지 않고 우선순위와 다음 행동까지 제안해요.</span></div>
+    <div class="trait"><b>기준 만들기</b><span>한 번 판단한 것을 가이드와 원칙으로 남겨 팀이 다시 쓰게 해요.</span></div></div>`)}
+  ${sec('featured','대표 케이스', `<div class="cards">${P.filter(p=>p.featured).map(card).join('')}</div>`)}
+  ${sec('manual','함께 일할 때 알아 두면 좋은 것', `<div class="manual">
+    <div class="out"><b>짧은 주기로 결과를 보여 줄 때 힘이 나요</b><span>중간 결과를 자주 공유하고 피드백을 빨리 받는 방식이 잘 맞아요.</span></div>
+    <div class="out"><b>없는 구조를 처음 만드는 일을 좋아해요</b><span>산출물이 없던 관리자 화면, 기준이 없던 문구 체계처럼 빈 곳에서 시작하는 일.</span></div>
+    <div class="out"><b>배운 걸 가르치며 정리해요</b><span>워크숍, 강의, 특강을 준비하면서 생각이 가장 또렷해져요.</span></div>
+    <div class="out"><b>다음에 하고 싶은 일</b><span>한 서비스를 출시 뒤까지 맡아 지표를 보고 고쳐 나가는 일이에요.</span></div></div>`)}
+  ${sec('contact','연락처', `<div class="prose"><p>이메일 <b>seonmihong69@gmail.com</b></p><p>LinkedIn · 블로그 ${F('링크')}</p></div>`)}`;
+},
+
+ai(){ n = 0; return `
+  <header class="phead"><div class="crumb">시작하기</div><h1>AI와 일하는 방식</h1>
+    <p class="lede">AI에게 일을 맡기기 전에 기준부터 글로 써요. 사람이 판단하는 순서를 문장으로 만들면, 같은 문장을 AI도 따를 수 있어요.</p></header>
+  ${sec('layers','세 겹으로 써요', `<ol class="steps">
+    <li><div><b>기준을 먼저 쓴다</b><span>원칙과 판단 순서를 사람이 읽을 수 있게 정리해요. (IBK 가이드의 원칙·상황별 기준)</span></div></li>
+    <li><div><b>AI가 읽는 형태로 옮긴다</b><span>같은 기준을 AI 지침과 예문 데이터로 바꿔요. (AI 지침, RAG 예문)</span></div></li>
+    <li><div><b>결과는 사람이 기준으로 검수한다</b><span>AI 결과를 그 기준으로 검수하고, 어긋나면 지침을 고쳐요. (LLM 결과 검수)</span></div></li></ol>`)}
+  ${sec('rules','AI에게 일을 맡길 때 지키는 규칙', `<ul class="dots">
+    <li>이미 있는 자료는 다시 묻지 않게, 먼저 읽게 해요.</li>
+    <li>모르는 사실은 지어내지 말고 빈칸으로 표시하게 해요.</li>
+    <li>AI가 정리한 내용은 사람이 확인한 뒤에 확정해요.</li>
+    <li>최신 사실이 공통 원칙보다 우선해요.</li></ul>
+    <p class="note">취업 준비에 쓰려고 직접 만든 AI 작업 가이드에서 가져온 규칙이에요.</p>`)}
+  ${sec('where','프로젝트에서 AI를 쓴 곳', `<div class="tablewrap"><table class="list"><thead><tr><th>프로젝트</th><th>맡긴 일</th></tr></thead><tbody>
+    ${P.filter(p=>p.cat.includes('AI')).map(p=>`<tr><td><a href="#${p.id}">${p.title}</a></td><td>${p.ai[0]}</td></tr>`).join('')}
+  </tbody></table></div>`)}
+  ${sec('tools','실무에서 쓰는 AI 도구', `<div class="prose"><p>도구 이름과 각각 맡기는 일 ${F()}</p></div>${ph('AI 작업 화면 예시','16/9')}`)}`;
+},
+
+projects(){ n = 0; return `
+  <header class="phead"><div class="crumb">프로젝트</div><h1>모든 프로젝트</h1>
+    <p class="lede">학교 프로젝트부터 지금까지 한 일을 최신순으로 모았어요. 유형을 골라 좁혀 볼 수 있어요.</p></header>
+  <div class="filters" role="group" aria-label="유형 필터">${CATS.map((c,i)=>`<button type="button" class="chip" id="chip-${i}" data-cat="${c}" aria-pressed="${i===0}">${c}</button>`).join('')}</div>
+  <div class="tablewrap"><table class="list" id="plist"><thead><tr><th>기간</th><th>프로젝트</th><th>유형</th></tr></thead><tbody>
+    ${[...P].sort((a,b)=>b.when.localeCompare(a.when)).map(p=>`<tr data-cats="${p.cat.join(',')}"><td class="when">${p.when}</td><td><a href="#${p.id}">${p.title}</a><span class="sub">${p.service}</span></td><td><div class="tags">${p.cat.map(c=>`<span class="tag ${c==='AI'?'ai':''}">${c}</span>`).join('')}</div></td></tr>`).join('')}
+  </tbody></table></div>
+  ${sec('short','짧은 작업', `<div class="tablewrap"><table class="list"><thead><tr><th>기간</th><th>작업</th><th>메모</th></tr></thead><tbody>
+    ${SHORT.map(s=>`<tr><td class="when">${s[0]}</td><td><b>${s[1]}</b><span class="sub">${s[2]}</span></td><td>${s[3]}</td></tr>`).join('')}</tbody></table></div>`)}`;
+},
+
+career(){ n = 0; return `
+  <header class="phead"><div class="crumb">이력</div><h1>경력과 이력</h1></header>
+  ${sec('work','경력', `<div class="tl">
+    <div><time>2025.03 – 현재</time><b>하이유엑스컨설팅 · 주임</b><span>UX 리서치, UX 라이팅 가이드, 서비스 기획. 대표: IBK 가이드, 모니모 조사, 이집트 표준</span></div>
+    <div><time>2023.04 – 2024.08</time><b>오픈오브젝트 · 기획</b><span>서비스·UX/UI 기획. 대표: 헤이비글 리뉴얼과 운영, 신한카드 신청 흐름</span></div>
+    <div><time>2020.07 – 2022.11</time><b>에듀인애스크 · 인턴 → 아르바이트</b><span>화상영어 서비스 마케팅·커리큘럼 기획, 디자인, CS·CRM</span></div></div>`)}
+  ${sec('edu','학력 · 교육 · 자격', `<div class="tablewrap"><table class="list"><tbody>
+    <tr><td class="when">2018.03 – 2023.08</td><td><b>서울여자대학교</b><span class="sub">소프트웨어융합학과 · 디지털융합경영 복수전공</span></td></tr>
+    <tr><td class="when">2023.01 – 2023.03</td><td><b>제로베이스 PM 스쿨 10기</b><span class="sub">서비스 기획(PM) 과정</span></td></tr>
+    <tr><td class="when">2026.02</td><td><b>에니어그램분석사 1급</b><span class="sub">한국심리교육협회</span></td></tr>
+    <tr><td class="when">2024.03</td><td><b>CSTS Foundation</b><span class="sub">SW 테스트 전문가</span></td></tr>
+    <tr><td class="when">2022.12</td><td><b>SQLD</b><span class="sub">SQL 개발자</span></td></tr></tbody></table></div>`)}
+  ${sec('talks','강의 · 활동', `<div class="tl">
+    <div><time>2026</time><b>청년 에니어그램 특강</b><span>콘텐츠·활동 설계와 강의</span></div>
+    <div><time>2026</time><b>청소년 진로특강</b><span>교사 인터뷰로 활동을 검증하고 진행</span></div>
+    <div><time>2025</time><b>이집트 디지털정부 워크숍·강의</b><span>UI/UX 표준 공유</span></div>
+    <div><time>2021 – 2024</time><b>새이주청 운영진</b><span>90명 청년 단체 행사·회계·SNS·홍보물</span></div>
+    <div><time>2019 – 2022</time><b>위미키즈 영상팀 리더</b><span>어린이 애니메이션 2편 제작, 텀블벅 펀딩</span></div>
+    <div><time>2019</time><b>인도네시아 반둥공대 해커톤</b><span>현지 학생과 서비스 기획, 1등</span></div></div>`)}
+  ${sec('awards','수상', `<ul class="dots"><li>2022 서울여대 프로젝트종합설계 최우수상 (화안)</li><li>2021 애플리케이션 개발 해커톤 장려상</li><li>2019 서울여대 아두이노 해커톤 우수상</li><li>그 외 영상 공모전 수상 3건</li></ul>`)}`;
+},
+};
+
+/* ───────── 내비 · 라우팅 ───────── */
+const NAV = [
+  ['시작하기', [['home','소개'],['ai','AI와 일하는 방식']]],
+  ['대표 케이스', P.filter(p=>p.featured).map(p=>[p.id, p.service.split(' ').slice(0,3).join(' ')])],
+  ['프로젝트', [['projects','모든 프로젝트', P.length + SHORT.length]]],
+  ['이력', [['career','경력과 이력']]],
+];
+const SHORTNAME = {ibk:'UX 라이팅 가이드 · AI', heybeagle:'매칭 플랫폼 리뉴얼', monimo:'30명 사용자 조사', egypt:'정부 UI/UX 표준 · AI'};
+const nav = document.getElementById('nav');
+nav.innerHTML = `<a class="brand" href="#home"><span class="ver">2026.10 초안</span><span class="name">홍선미</span><span class="role">UX·서비스 기획 → 프로덕트</span></a>` +
+  NAV.map(([g, items]) => `<div class="ngroup"><h4>${g}</h4>${items.map(([id,label,c]) => `<a class="nlink" href="#${id}">${SHORTNAME[id]||label}${c?`<small>${c}</small>`:''}</a>`).join('')}</div>`).join('') +
+  `<div class="nfoot">초안 · 주황색 표시는 채워야 할 곳이에요.<br><button class="themebtn" id="themeBtn" type="button">다크 모드</button></div>`;
+
+const page = document.getElementById('page'), toc = document.getElementById('toc');
+function render(){
+  const id = (location.hash || '#home').slice(1);
+  const proj = P.find(p => p.id === id);
+  const html = proj ? projectPage(proj) : (PAGES[id] || PAGES.home)();
+  page.innerHTML = html;
+  const cur = proj ? id : (PAGES[id] ? id : 'home');
+  nav.querySelectorAll('.nlink').forEach(a => { if (a.getAttribute('href') === '#' + cur) a.setAttribute('aria-current','page'); else a.removeAttribute('aria-current'); });
+  const hs = [...page.querySelectorAll('.sec')];
+  toc.innerHTML = hs.length ? '<b>이 페이지</b>' + hs.map(s => `<button type="button" data-to="${s.id}">${s.querySelector('h2').lastChild.textContent}</button>`).join('') : '';
+  if (cur === 'projects') bindFilter();
+  nav.classList.remove('open'); document.getElementById('menuBtn').setAttribute('aria-expanded','false');
+  window.scrollTo(0,0);
+}
+function bindFilter(){
+  const chips = [...document.querySelectorAll('.chip')];
+  chips.forEach(ch => ch.addEventListener('click', () => {
+    chips.forEach(c => c.setAttribute('aria-pressed', c === ch));
+    const cat = ch.dataset.cat;
+    document.querySelectorAll('#plist tbody tr').forEach(tr => tr.hidden = !(cat === '전체' || tr.dataset.cats.split(',').includes(cat)));
+  }));
+}
+toc.addEventListener('click', e => { const t = e.target.closest('[data-to]'); if (t) { e.preventDefault(); document.getElementById(t.dataset.to).scrollIntoView({behavior:'smooth'}); } });
+window.addEventListener('hashchange', render);
+document.getElementById('menuBtn').addEventListener('click', e => { const o = nav.classList.toggle('open'); e.currentTarget.setAttribute('aria-expanded', o); });
+document.getElementById('themeBtn').addEventListener('click', () => {
+  const r = document.documentElement, dark = r.dataset.theme ? r.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+  r.dataset.theme = dark ? 'light' : 'dark';
+  document.getElementById('themeBtn').textContent = dark ? '다크 모드' : '라이트 모드';
+});
+document.getElementById('themeBtn').textContent = matchMedia('(prefers-color-scheme: dark)').matches ? '라이트 모드' : '다크 모드';
+render();
+</script>
+</body>
+</html>
